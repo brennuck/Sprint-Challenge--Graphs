@@ -26,8 +26,11 @@ world.print_rooms()
 player = Player(world.starting_room)
 
 # Fill this out with directions to walk
-# traversal_path = ['n', 'n']
-traversal_path = []
+def projected_path(starting_room, already_visited=set()):
+    visited = set()
+    
+    for room in already_visited: # If they visited they adds room to visted
+        visited.add(room)
 
 
 
