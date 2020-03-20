@@ -26,16 +26,32 @@ world.print_rooms()
 player = Player(world.starting_room)
 
 # Fill this out with directions to walk
-
+traversal_path = []
 
 # TRAVERSAL TEST
 visited_rooms = set()
 player.current_room = world.starting_room
 visited_rooms.add(player.current_room)
 
-for move in traversal_path:
+next_possible_moves ={ 'n': 'e', 'e': 's', 's': 'w', 'w': None }
+back_moves ={ 'n': 's', 's': 'n', 'e': 'w', 'w': 'e' }
+steps = ['n']
+
+while len(steps) > 0:
+    move = steps.pop()
     player.travel(move)
-    visited_rooms.add(player.current_room)
+
+    if player.current_room not in visited_rooms: # If the rooms have been visited then go back.
+        traversal_path.append(back_moves[move])
+        steps.append(back_moves[move])
+        visited_rooms.add(player.current_room)
+
+    for new_move in ['n', 'e', 's', 'w']: # If in a direction a room hasn't been visited it moves there.
+        new_room = player.current_room.get_room_in_direction(new_move)
+        if new_room and new_room not in visited_rooms:
+            traversal_path.append(new_move)
+            steps.append(new_move)
+            break
 
 if len(visited_rooms) == len(room_graph):
     print(f"TESTS PASSED: {len(traversal_path)} moves, {len(visited_rooms)} rooms visited")
