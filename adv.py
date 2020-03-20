@@ -32,6 +32,22 @@ def projected_path(starting_room, already_visited=set()):
     for room in already_visited: # If they visited they adds room to visted
         visited.add(room)
 
+    path = []
+    opposite = { 'n': 's', 'e': 'w', 's': 'n', 'w': 'e' }
+
+    def add_to_path(room, back=None):
+        visited.add(room)
+        exits = room.get_exits()
+
+        for direction in exits:
+            if room.get_room_in_direction(direction) not in visited:
+                path.append(direction)
+                add_to_path(room.get_room_in_direction(direction), opposite[direction])
+        if back:
+            path.append(back)
+    add_to_path(starting_room)
+    return path
+
 
 
 # TRAVERSAL TEST
